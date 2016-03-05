@@ -1,0 +1,356 @@
+# as a demonstration of an API spec in YAML
+swagger: '2.0'
+info:
+  title:  IDX Broker API
+  description: Move your app forward with the API. All GET calls testing IDX Broker API methods.
+  version: "1.0.4"
+# the domain of the service
+host: api.idxbroker.com
+# array of all schemes that your API supports
+schemes:
+  - https
+# will be prefixed to all paths
+produces:
+  - application/x-www-form-urlencoded
+#API endpoints
+paths:
+
+  /clients/featured:
+    get:
+      summary: Featured Listings
+      description:
+        Listing data. Only listings belonging to the agent(s) on an IDX Broker Account is available.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameters/interval"
+        - $ref: "#/parameters/startDatetime"
+        - $ref: "#/parameters/dateType"
+        - $ref: "#/parameters/limit"
+        - $ref: "#/parameters/offset"
+        - $ref: "#/parameters/rf"
+
+      tags:
+        - Clients
+      responses:
+        200:
+          description: An array of listing data
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PriceEstimate'
+        204:
+          $ref: '#/definitions/204'
+        400:
+          $ref: '#/definitions/400'
+        401:
+          $ref: '#/definitions/401'
+        403:
+          $ref: '#/definitions/403'
+        404:
+          $ref: '#/definitions/404'
+        405:
+          $ref: '#/definitions/405'
+        406:
+          $ref: '#/definitions/406'
+        409:
+          $ref: '#/definitions/409'
+        412:
+          $ref: '#/definitions/412'
+        413:
+          $ref: '#/definitions/413'
+        416:
+          $ref: '#/definitions/416'
+        417:
+          $ref: '#/definitions/417'
+        500:
+          $ref: '#/definitions/500'
+        503:
+          $ref: '#/definitions/503'
+        521:
+          $ref: '#/definitions/521'
+
+
+  /leads/lead/{leadID}:
+    get:
+      summary: Lead Data
+      description: Get information for one or multiple leads.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - name: leadID
+          in: path
+          required: true
+          description: The id of a lead
+          type: string
+        - $ref: "#/parameters/interval"
+        - $ref: "#/parameters/startDatetime"
+        - $ref: "#/parameters/dateType"
+        - $ref: "#/parameters/limit"
+        - $ref: "#/parameters/offset"
+        - $ref: "#/parameters/rf"
+      tags:
+        - Leads
+      responses:
+        200:
+          description: An array of listing data
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Product'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /mls/searchfields/{idxID}:
+    get:
+      summary: Seach Fields Data
+      description: All the fields in a given MLS that are currently allowed to be searched according to MLS guidelines.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - name: idxID
+          in: path
+          description: The idx id of an mls.
+          required: true
+          type: string
+          minLength: 4
+          maxLength: 4
+        - $ref: "#/parameters/filterField"
+        - $ref: "#/parameters/filterValue"
+        - $ref: "#/parameters/rf"
+      tags:
+        - MLS
+      responses:
+        200:
+          description: Profile information for a user
+          schema:
+            $ref: '#/definitions/Profile'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /partners/clients:
+    get:
+      summary: Client List
+      description: A list of clients available to a given partner. The list of clients can be filtered by GET values.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameters/filterField"
+        - $ref: "#/parameters/filterValue"
+        - $ref: "#/parameters/rf"
+      tags:
+        - Partners
+      responses:
+        200:
+          description: History information for the given user
+          schema:
+            $ref: '#/definitions/Activities'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+#default paramaters
+parameters:
+  accesskey:
+    name: accesskey
+    in: header
+    description: REQUIRED Your API Key.
+    required: true
+    type: string
+    minLength: 22
+    maxLength: 22
+  version:
+    name: version
+    in: header
+    description: Version of the API to call.
+    required: false
+    type: string
+  output:
+    name: output
+    in: header
+    description: Request JSON or XML return.
+    required: false
+    type: string
+  interval:
+    name: interval
+    in: query
+    description: The number of hours worth of data to return.
+    required: false
+    type: number
+  startDatetime:
+    name: startDatetime
+    in: query
+    description: The date and time to from which the interval counts back.
+    required: false
+    type: number
+  dateType:
+    name: dateType
+    in: query
+    description: There are several dates associated with a property, this will specify what is being used to return information. If no value is specified dateAdded will be used.
+    required: false
+    type: number
+  limit:
+    name: limit
+    in: query
+    description: Items to skip from the beginning.
+    required: false
+    type: number
+  offset:
+    name: offset
+    in: query
+    description: Items to skip from the beginning.
+    required: false
+    type: number
+  rf:
+    name: rf
+    in: query
+    description: Array of fields to return in the output.
+    required: false
+    type: string
+  filterField:
+    name: filterField
+    in: query
+    description: The field to use when filtering output.
+    required: false
+    type: string
+  filterValue:
+    name: filterValue
+    in: query
+    description: The value by which to filter. Conditional on use of filterField.
+    required: false
+    type: string
+
+definitions:
+
+  204:
+    description: Emptiness
+  400:
+    description: Required parameter missing or invalid.
+  401:
+    description: accesskey not valid or revoked.
+  403:
+    description: URL provided is not using SSL (HTTPS).
+  404:
+    description: Invalid API component specified.
+  405:
+    description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+  406:
+    description: accesskey not provided
+  409:
+    description: Duplicate unique data detected.
+  412:
+    description: Account is over it's hourly access limit.
+  413:
+    description: Requested entity too large.
+  416:
+    description: Requested time range not satisfiable.
+  417:
+    description: There are more saved links in the account than allowed through the API.
+  500:
+    description: General system error. Please try again later or contact IDX support.
+  503:
+    description: Scheduled or emergency API maintenance will result in 503 errors.
+  521:
+    description: Temporary error. There is a possibility that not all API methods are affected.
+
+  Product:
+    type: object
+    properties:
+      product_id:
+        type: string
+        description: Unique identifier representing a specific product for a given latitude & longitude. For example, uberX in San Francisco will have a different product_id than uberX in Los Angeles.
+      description:
+        type: string
+        description: Description of product.
+      display_name:
+        type: string
+        description: Display name of product.
+      capacity:
+        type: string
+        description: Capacity of product. For example, 4 people.
+      image:
+        type: string
+        description: Image URL representing the product.
+  PriceEstimate:
+    type: object
+    properties:
+      product_id:
+        type: string
+        description: Unique identifier representing a specific product for a given latitude & longitude. For example, uberX in San Francisco will have a different product_id than uberX in Los Angeles
+      currency_code:
+        type: string
+        description: "[ISO 4217](http://en.wikipedia.org/wiki/ISO_4217) currency code."
+      display_name:
+        type: string
+        description: Display name of product.
+      estimate:
+        type: string
+        description: Formatted string of estimate in local currency of the start location. Estimate could be a range, a single number (flat rate) or "Metered" for TAXI.
+      low_estimate:
+        type: number
+        description: Lower bound of the estimated price.
+      high_estimate:
+        type: number
+        description: Upper bound of the estimated price.
+      surge_multiplier:
+        type: number
+        description: Expected surge multiplier. Surge is active if surge_multiplier is greater than 1. Price estimate already factors in the surge multiplier.
+  Profile:
+    type: object
+    properties:
+      first_name:
+        type: string
+        description: First name of the Uber user.
+      last_name:
+        type: string
+        description: Last name of the Uber user.
+      email:
+        type: string
+        description: Email address of the Uber user
+      picture:
+        type: string
+        description: Image URL of the Uber user.
+      promo_code:
+        type: string
+        description: Promo code of the Uber user.
+  Activity:
+    type: object
+    properties:
+      uuid:
+        type: string
+        description: Unique identifier for the activity
+  Activities:
+    type: object
+    properties:
+      offset:
+        type: integer
+        format: int32
+        description: Position in pagination.
+      limit:
+        type: integer
+        format: int32
+        description: Number of items to retrieve (100 max).
+      count:
+        type: integer
+        format: int32
+        description: Total number of items available.
+      history:
+        type: array
+        items:
+          $ref: '#/definitions/Activity'
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
