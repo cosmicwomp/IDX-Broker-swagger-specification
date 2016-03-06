@@ -259,7 +259,7 @@ definitions:
   521:
     description: Temporary error. There is a possibility that not all API methods are affected.
 
-  Place"
+  Place:
     placeholder: palceholder
 
   Error:
