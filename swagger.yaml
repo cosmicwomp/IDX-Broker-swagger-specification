@@ -1412,11 +1412,7 @@ paths:
         - $ref: "#/parameters/accesskey"
         - $ref: "#/parameters/version"
         - $ref: "#/parameters/output"
-        - name: leadID
-          in: path
-          required: true
-          description: The id of a lead
-          type: string
+        - $ref: "#/parameter/idxID"
         - $ref: "#/parameters/interval"
         - $ref: "#/parameters/startDatetime"
         - $ref: "#/parameters/dateType"
@@ -1438,6 +1434,199 @@ paths:
             $ref: '#/definitions/Error'
 
   #mls component
+  /mls/age/{idxID}:
+    get:
+      summary: Last MLS refresh
+      description: Gives the date and time a particular MLS was last downloaded, processed and the last time images gathering was completed.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameter/idxID"
+        - $ref: "#/parameters/rf"
+      tags:
+        - MLS
+      responses:
+        200:
+          description: Profile information for a user
+          schema:
+            $ref: '#/definitions/Error'
+  
+  
+  /mls/approvedmls:
+    get:
+      summary: Last MLS refresh
+      description: This method provides all of the IDX IDs and names for all of the paperwork approved MLSs on the client's account. Note this method was previously camelcased as "approvedMLS" but was made lower case to fit the API naming convention. Calls to "approvedMLS" will be forwarded to "approvedmls" and "approvedMLS" is listed as deprecated in the method list.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameters/rf"
+      tags:
+        - MLS
+      responses:
+        200:
+          description: Profile information for a user
+          schema:
+            $ref: '#/definitions/Error'
+  
+  
+  /mls/cities/{idxID}:
+    get:
+      summary: Cities in an MLS
+      description: All cities represented in the current set of MLS data are available from this method. The output can be filtered using additional GET parameters.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameter/idxID"
+        - $ref: "#/parameters/filterField"
+        - $ref: "#/parameters/filterValue"
+        - $ref: "#/parameters/rf"
+      tags:
+        - MLS
+      responses:
+        200:
+          description: An array of cities in an MLS.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  
+  
+  /mls/counties/{idxID}:
+    get:
+      summary: Counties in an MLS
+      description: All counties represented in the current set of MLS data are available from this method. The output can be filtered using additional GET parameters.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameter/idxID"
+        - $ref: "#/parameters/filterField"
+        - $ref: "#/parameters/filterValue"
+        - $ref: "#/parameters/rf"
+      tags:
+        - MLS
+      responses:
+        200:
+          description: An array of counties in an MLS.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+            
+            
+  /mls/listcomponents:
+    get:
+      summary: List of all MLS API components
+      description: This is a simple, access anywhere, method for getting a list of all API components available.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+      tags:
+        - MLS
+      responses:
+        200:
+          description: This is a simple, access anywhere, method for getting a list of all API components available.
+          schema:
+            $ref: '#/definitions/Error'          
+  
+  
+  /mls/listmethods:
+    get:
+      summary: List of all MLS API methods
+      description: A simple method for listing all available methods in the current API component. This method will also list which request methods (GET, PUT, POST, or DELETE) are supported by each method in addition to each method status.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+      tags:
+        - MLS
+      responses:
+        200:
+          description: A simple method for listing all available methods in the current API component. This method will also list which request methods (GET, PUT, POST, or DELETE) are supported by each method in addition to each method status.
+          schema:
+            $ref: '#/definitions/Error'          
+            
+            
+  /mls/prices/{idxID}:
+    get:
+      summary: The sum total of properties listed in a given MLS as well as sums for each property type in the MLS.
+      description: The sum total of properties listed in a given MLS as well as sums for each property type in the MLS.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameter/idxID"
+        - $ref: "#/parameters/rf"
+        
+      tags:
+        - MLS
+      responses:
+        200:
+          description: The sum total of properties listed in a given MLS as well as sums for each property type in the MLS.
+          schema:
+            $ref: '#/definitions/Error' 
+   
+            
+  /mls/propertycount/{idxID}:
+    get:
+      summary: Gives a total number of listings available for a given city, county, or zipcode.
+      description: Gives a total number of listings available for a given city, county, or zipcode.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameter/idxID"
+        - name: countType
+          in: path
+          description: The numeric city ID, county ID, or zipcode for which you want to get a property count.
+          required: true
+          type: string
+ 
+        - $ref: "#/parameters/countSpecifier"
+        
+        - $ref: "#/parameters/rf"
+      tags:
+        - MLS
+      responses:
+        200:
+          description: Gives a total number of listings available for a given city, county, or zipcode.
+          schema:
+            $ref: '#/definitions/Error'          
+            
+            
+  /mls/propertytypes/{idxID}:
+    get:
+      summary: Gives the property type information for all types that are available on a given MLS.
+      description: Gives the property type information for all types that are available on a given MLS.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameter/idxID"
+        - $ref: "#/parameters/filterField"
+        - $ref: "#/parameters/filterValue"
+        - $ref: "#/parameters/rf"
+      tags:
+        - MLS
+      responses:
+        200:
+          description: Gives the property type information for all types that are available on a given MLS.
+          schema:
+            $ref: '#/definitions/Error'         
+            
+            
   /mls/searchfields/{idxID}:
     get:
       summary: Seach Fields Data
@@ -1445,13 +1634,8 @@ paths:
       parameters:
         - $ref: "#/parameters/accesskey"
         - $ref: "#/parameters/version"
-        - name: idxID
-          in: path
-          description: The idx id of an mls.
-          required: true
-          type: string
-          minLength: 4
-          maxLength: 4
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameter/idxID"
         - $ref: "#/parameters/filterField"
         - $ref: "#/parameters/filterValue"
         - $ref: "#/parameters/rf"
@@ -1467,7 +1651,331 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+
+  /mls/searchfieldvalues/{idxID}:
+    get:
+      summary: Seach Field Values
+      description: Field values in a given MLS that are currently allowed to be searched according to MLS guidelines.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameter/idxID"
+        - name: mlsPtID
+          in: path
+          description: The property type ID in an MLS
+          required: true
+          type: number
+          minLength: 1
+          maxLength: 1
+        - name: name
+          in: path
+          description: mls field name - the IDX assigned name of the MLS field name. See the searchfields for the list of searchable fields.
+          required: true
+          type: number
+      
+        
+      tags:
+        - MLS
+      responses:
+        200:
+          description: Search field values
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'  
+            
+            
+  /mls/zipcodes/{idxID]:
+    get:
+      summary: Field values in a given MLS that are currently allowed to be searched according to MLS guidelines.
+      description: Field values in a given MLS that are currently allowed to be searched according to MLS guidelines.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameter/idxID"
+        - $ref: "#/parameters/filterField"
+        - $ref: "#/parameters/filterValue"
+        - $ref: "#/parameters/rf"
+      tags:
+        - MLS
+      responses:
+        200:
+          description: An array of zip codes in an MLS.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+            
+            
+  
+            
   #partners component
+  
+  /partners/aggregatedagents:
+    get:
+      summary: Get a list of all agents for your clients.
+      description: Get a list of all agents for your clients.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameters/clientChunk"
+        - $ref: "#/parameters/includeDisabledAccounts"
+        - $ref: "#/parameters/offset"
+        - $ref: "#/parameters/limit"
+        - $ref: "#/parameters/rf"
+      tags:
+        - Partners
+      responses:
+        200:
+          description: Get a list of all agents for your clients.
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  
+  /partners/aggregatedfeatured:
+    get:
+      summary: Get a list of featured MLS properties. 
+      description: Get a list of featured MLS properties. Output fields may or may not be populated depending on how the information was entered into the IDX system.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameters/dateType"
+        - $ref: "#/parameters/interval"
+        - $ref: "#/parameters/startDatetime"
+        - $ref: "#/parameters/clientChunk"
+        - $ref: "#/parameters/includeDisabledAccounts"
+        - $ref: "#/parameters/offset"
+        - $ref: "#/parameters/limit"
+        - $ref: "#/parameters/rf"
+      tags:
+        - Partners
+      responses:
+        200:
+          description: Get a list of featured MLS properties. 
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  
+  /partners/aggregatedleads:
+    get:
+      summary: Get a list of all leads. 
+      description: Get a list of featured MLS properties. For bandwidth and memory considerations there is a limit of 5,000 on the number of leads that can be returned in any single request. Even if a full week of data is requested this limit will only be encountered if your clients have a combined average 30+ leads created, updated, or active per hour (as such it will be most common when requesting leads based on last property update date). If this limit is exceeded a 413 -Requested Entity Too Large error is returned. If encountered a smaller interval will need to be used.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameters/dateType"
+        - $ref: "#/parameters/interval"
+        - $ref: "#/parameters/startDatetime"
+        - $ref: "#/parameters/clientChunk"
+        - $ref: "#/parameters/includeDisabledAccounts"
+        - $ref: "#/parameters/rf"
+      tags:
+        - Partners
+      responses:
+        200:
+          description: Get a list of all leads. 
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  
+  /partners/aggregatedleadtraffic:
+    get:
+      summary: Get a list of all leads traffic history. 
+      description: Get a list of all leads traffic history. For bandwidth and memory considerations there is a limit of 5,000 on the number of searches that can be returned in any single request.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameters/interval"
+        - $ref: "#/parameters/startDatetime"
+        - $ref: "#/parameters/clientChunk"
+        - $ref: "#/parameters/includeDisabledAccounts"
+        - $ref: "#/parameters/rf"
+      tags:
+        - Partners
+      responses:
+        200:
+          description: Get a list of all leads traffic history.
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  
+  /partners/aggregatedlistingstatus:
+    get:
+      summary: This method gives the status for all MLS listings (not supplemental) broken down by client account ID. This includes sold/pending listings with an unknown status which are not usually returned by sold/pending api methods. This is helpful if you need to know when previously gathered featured properties have left the market.
+      description: This method gives the status for all MLS listings (not supplemental) broken down by client account ID. This includes sold/pending listings with an unknown status which are not usually returned by sold/pending api methods. This is helpful if you need to know when previously gathered featured properties have left the market.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameters/filterField"
+        - $ref: "#/parameters/filterValue"
+        - $ref: "#/parameters/clientChunk"
+        - $ref: "#/parameters/includeDisabledAccounts"
+        - $ref: "#/parameters/rf"
+      tags:
+        - Partners
+      responses:
+        200:
+          description: This method gives the status for all MLS listings (not supplemental) broken down by client account ID. This includes sold/pending listings with an unknown status which are not usually returned by sold/pending api methods. This is helpful if you need to know when previously gathered featured properties have left the market.
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+            
+  /partners/aggregatedproperties:
+    get:
+      summary: Get a list of all lead saved properties. For bandwidth and memory considerations there is a limit of 5,000 on the number of searches that can be returned in any single request.
+      description: Get a list of all lead saved properties. For bandwidth and memory considerations there is a limit of 5,000 on the number of searches that can be returned in any single request.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameters/interval"
+        - $ref: "#/parameters/startDatetime"
+        - $ref: "#/parameters/dateType"
+        - $ref: "#/parameters/clientChunk"
+        - $ref: "#/parameters/includeDisabledAccounts"
+        - $ref: "#/parameters/rf"
+      tags:
+        - Partners
+      responses:
+        200:
+          description: Get a list of all lead saved properties. For bandwidth and memory considerations there is a limit of 5,000 on the number of searches that can be returned in any single request.
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'          
+            
+  /partners/aggregatedsearches:
+    get:
+      summary: Get a list of all lead saved searches. For bandwidth and memory considerations there is a limit of 5,000 on the number of searches that can be returned in any single request.
+      description: Get a list of all lead saved searches. For bandwidth and memory considerations there is a limit of 5,000 on the number of searches that can be returned in any single request.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameters/interval"
+        - $ref: "#/parameters/startDatetime"
+        - $ref: "#/parameters/dateType"
+        - $ref: "#/parameters/clientChunk"
+        - $ref: "#/parameters/includeDisabledAccounts"
+        - $ref: "#/parameters/rf"
+      tags:
+        - Partners
+      responses:
+        200:
+          description: Get a list of all lead saved searches. For bandwidth and memory considerations there is a limit of 5,000 on the number of searches that can be returned in any single request.
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+            
+  /partners/aggregatedsoldpending:
+    get:
+      summary: Get a list of sold/pending MLS properties. Output fields may or may not be populated depending on how the information was entered into the IDX system. We are planning to add the ability to query by the date the property left the market and, for sold listings, the date it was sold in a future update.
+      description: Get a list of sold/pending MLS properties. Output fields may or may not be populated depending on how the information was entered into the IDX system. We are planning to add the ability to query by the date the property left the market and, for sold listings, the date it was sold in a future update.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameters/interval"
+        - $ref: "#/parameters/startDatetime"
+        - $ref: "#/parameters/dateType"
+        - $ref: "#/parameters/clientChunk"
+        - $ref: "#/parameters/includeDisabledAccounts"
+        - $ref: "#/parameters/offset"
+        - $ref: "#/parameters/limit"
+        - $ref: "#/parameters/rf"
+      tags:
+        - Partners
+      responses:
+        200:
+          description: Get a list of sold/pending MLS properties. Output fields may or may not be populated depending on how the information was entered into the IDX system. We are planning to add the ability to query by the date the property left the market and, for sold listings, the date it was sold in a future update.
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+            
+  /partners/aggregatedsupplemental:
+    get:
+      summary: Get a list of supplemental (non-MLS) properties. Output fields may or may not be populated depending on how the information was entered into the IDX system.
+      description: Get a list of supplemental (non-MLS) properties. Output fields may or may not be populated depending on how the information was entered into the IDX system.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameters/interval"
+        - $ref: "#/parameters/startDatetime"
+        - $ref: "#/parameters/dateType"
+        - $ref: "#/parameters/clientChunk"
+        - $ref: "#/parameters/includeDisabledAccounts"
+        - $ref: "#/parameters/offset"
+        - $ref: "#/parameters/limit"
+        - $ref: "#/parameters/rf"
+      tags:
+        - Partners
+      responses:
+        200:
+          description: Get a list of supplemental (non-MLS) properties. Output fields may or may not be populated depending on how the information was entered into the IDX system.
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+            
+  /partners/apiversion:
+    get:
+      summary: Get the default api version.
+      description: Get the default api version.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+      tags:
+        - Partners
+      responses:
+        200:
+          description: Get the default api version.
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+            
   /partners/clients:
     get:
       summary: Client List
@@ -1490,6 +1998,69 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
+            
+  /partners/listcomponents:
+    get:
+      summary: This is a simple, access anywhere, method for getting a list of all API components available.
+      description: This is a simple, access anywhere, method for getting a list of all API components available.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+      tags:
+        - Partners
+      responses:
+        200:
+          description: This is a simple, access anywhere, method for getting a list of all API components available.
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+            
+  /partners/listmethods:
+    get:
+      summary: A simple method for listing all available methods in the current API component. This method will also list which request methods (GET, PUT, POST, or DELETE) are supported by each method in addition to each method status.
+      description: A simple method for listing all available methods in the current API component. This method will also list which request methods (GET, PUT, POST, or DELETE) are supported by each method in addition to each method status.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+      tags:
+        - Partners
+      responses:
+        200:
+          description: A simple method for listing all available methods in the current API component. This method will also list which request methods (GET, PUT, POST, or DELETE) are supported by each method in addition to each method status.
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'          
+            
+  /partners/propertytypes:
+    get:
+      summary: Gives the names and IDs of all available property types. This method differs from the property type lookup method in the client API component in that it can look up property types for any active Platinum MLS, not just those for which the client is a member. The IDX property types are those used for multiple MLS searches and are equivalent to the property types used in the original IDX product. 
+      description: Gives the names and IDs of all available property types. This method differs from the property type lookup method in the client API component in that it can look up property types for any active Platinum MLS, not just those for which the client is a member. The IDX property types are those used for multiple MLS searches and are equivalent to the property types used in the original IDX product. 
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameters/idxID"
+        - $ref: "#/parameters/rf"
+      tags:
+        - Partners
+      responses:
+        200:
+          description: Gives the names and IDs of all available property types. This method differs from the property type lookup method in the client API component in that it can look up property types for any active Platinum MLS, not just those for which the client is a member. The IDX property types are those used for multiple MLS searches and are equivalent to the property types used in the original IDX product. 
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'  
+  
 
 #default paramaters
 parameters:
@@ -1564,6 +2135,37 @@ parameters:
     required: false
     enum: ["test", "test3"]
     type: string
+  idxID:
+    name: idxID
+    in: path
+    description: The idx id of an mls.
+    required: true
+    type: string
+    minLength: 4
+    maxLength: 4
+  countSpecifier:
+    name: countSpecifier
+    in: query
+    description: The numeric city ID, county ID, or zipcode for which you want to get a property count.
+    required: false
+    type: number
+  clientChunk:
+    name: clientChunk
+    in: query
+    description: Limit the results data to 400 clients. Example - clientChunk=1 returns data for the first 400 clients and clientChunk=2 returns the data for the next 400 clients.
+    required: false
+    type: number
+  includeDisabledAccounts:
+    name: includeDisabledAccounts
+    in: query
+    description: By default, disabled accounts are excluded from the results data. Use this parameter to include disabled accounts.
+    required: false
+    type: boolean
+  	
+
+  
+    
+  
 
 
 definitions:
