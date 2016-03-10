@@ -2,8 +2,8 @@
 swagger: '2.0'
 info:
   title:  IDX Broker API
-  description: Move your app forward with the API. All GET calls testing IDX Broker API methods.
-  version: "1.0.4"
+  description: Only GET calls available for live testing.
+  version: "1.2.3"
 # the domain of the service
 host: api.idxbroker.com
 # array of all schemes that your API supports
@@ -15,6 +15,385 @@ produces:
 #API endpoints
 paths:
 
+  #clients component
+  /clients/accounttype:
+    get:
+      summary:
+        Your account type.
+      description:
+        Get your account type. Platinum or Lite is returned.
+      tags:
+        - Clients
+      responses:
+        200:
+          description: Your account type
+          schema:
+            type: string
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/agents:
+    get:
+      summary: agent information
+      description: View agent information on a multi-user account.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameters/filterField"
+        - $ref: "#/parameters/filterValue"
+        - $ref: "#/parameters/startDatetime"
+        - $ref: "#/parameters/dateType"
+        - $ref: "#/parameters/rf"
+      tags:
+        - Clients
+      responses:
+        200:
+          description: An array of agent data
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/apiversion:
+    get:
+      summary: default api version
+      description: Get the default api version.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+      tags:
+        - Clients
+      responses:
+        200:
+          description: default api version
+          schema:
+            type: string
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/cities{listID}:
+    get:
+      summary: client city list data
+      description: Returns the cities available in each of a client's city lists. Since a client can build any number of city lists this method requires the ID of which list you want to view. To get a list of all city lists available do not send the primary request ID. The default list on each account has the id combinedActiveMLS
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - name: listID
+          in: path
+          required: false
+          description: The numaric id of a client city list. If an ID is given a list of IDs is returned.
+          type: string
+        - $ref: "#/parameters/rf"
+      tags:
+        - Clients
+      responses:
+        200:
+          description: An array of client's city lists data
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        204:
+          description: Valid API call with nothing to retrun
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/citieslistname:
+    get:
+      summary: IDs and names for each of a client's city lists
+      description: Returns the IDs and names for each of a client's city lists including MLS city lists. To get the list of all city lists available do not send the primary request ID. The default list on each account has the ID combinedActiveMLS Note that this method was previously camelcased as "citiesListName" but was made lower case to fit the API naming convention. Calls to "citiesListName" will be forwarded to "citieslistname" and "citiesListName" is listed as deprecated in the method list.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+      tags:
+        - Clients
+      responses:
+        200:
+          description: An array of agent data
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/counties{listID}:
+    get:
+      summary: agent information
+      description: View agent information on a multi-user account.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - name: listID
+          in: path
+          required: false
+          description: The numaric id of a client county list. If an ID is not given a list of IDs is returned.
+          type: number
+        - $ref: "#/parameters/rf"
+      tags:
+        - Clients
+      responses:
+        200:
+          description: An array of county list data
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/countieslistname:
+    get:
+      summary: IDs and names for each of a client's counties lists
+      description: Returns the IDs and names for each of a client's counties lists including MLS counties lists. To get the list of all counties lists available do not send the primary request ID. The default list on each account has the ID combinedActiveMLS.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+
+      tags:
+        - Clients
+      responses:
+        200:
+          description: An array of counties lists data
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/dynamicwrapperurl:
+    post:
+      summary: Update dynamic wrapper url
+      description: Update dynamic wrapper url for global, pages and saved links. If savedLinkID, or pageID are not passed, the global dynamic wrapper url will be updated.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+      tags:
+        - Clients
+      responses:
+        204:
+          description: Empty return
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        400:
+          description: dynamicURL is required.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: Invalid savedLinkID or pageID will result in 500. error
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
   /clients/featured:
     get:
       summary: Featured Listings
@@ -39,39 +418,992 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Place'
+              $ref: '#/definitions/Error'
         204:
-          $ref: '#/definitions/204'
+          description: Required parameter missing or invalid.
         400:
-          $ref: '#/definitions/400'
+          description: Required parameter missing or invalid.
         401:
-          $ref: '#/definitions/401'
+          description: accesskey not valid or revoked.
         403:
-          $ref: '#/definitions/403'
+          description: URL provided is not using SSL (HTTPS).
         404:
-          $ref: '#/definitions/404'
+          description: Invalid API component specified.
         405:
-          $ref: '#/definitions/405'
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
         406:
-          $ref: '#/definitions/406'
+          description: accesskey not provided
         409:
-          $ref: '#/definitions/409'
+          description: Duplicate unique data detected.
         412:
-          $ref: '#/definitions/412'
+          description: Account is over it's hourly access limit.
         413:
-          $ref: '#/definitions/413'
+          description: Requested entity too large.
         416:
-          $ref: '#/definitions/416'
+          description: Requested time range not satisfiable.
         417:
-          $ref: '#/definitions/417'
+          description: There are more saved links in the account than allowed through the API.
         500:
-          $ref: '#/definitions/500'
+          description: General system error. Please try again later or contact IDX support.
         503:
-          $ref: '#/definitions/503'
+          description: Scheduled or emergency API maintenance will result in 503 errors.
         521:
-          $ref: '#/definitions/521'
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/historical:
+    get:
+      summary: historical information
+      description: Returns a basic set of information for all of the client's historical (Sold MLS Data) properties when available. This is not yet avaiable.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameters/filterField"
+        - $ref: "#/parameters/filterValue"
+        - $ref: "#/parameters/startDatetime"
+        - $ref: "#/parameters/dateType"
+        - $ref: "#/parameters/rf"
+      tags:
+        - Clients
+      responses:
+        200:
+          description: An array of historical data
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/listcomponents:
+    get:
+      summary: componant information
+      description: View componant information.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+      tags:
+        - Clients
+      responses:
+        200:
+          description: An array of componant data
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/listmethods:
+    get:
+      summary: all available methods in the current API component
+      description: A simple method for listing all available methods in the current API component. This method will also list which request methods (GET, PUT, POST, or DELETE) are supported by each method in addition to each method status.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+
+      tags:
+        - Clients
+      responses:
+        200:
+          description: An array of methods data
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/offices:
+    get:
+      summary: offices information
+      description: View offices data.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameters/filterField"
+        - $ref: "#/parameters/filterValue"
+        - $ref: "#/parameters/startDatetime"
+        - $ref: "#/parameters/dateType"
+        - $ref: "#/parameters/rf"
+      tags:
+        - Clients
+      responses:
+        200:
+          description: An array of offices data
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/postalcodes{listID}:
+    get:
+      summary: client's postalcode lists
+      description: Returns the postalcodes available in each of a client's postalcode lists. Since a client can build any number of postalcode lists this method requires the ID of which list you want to view. To get a list of all postalcode lists available do not send the primary request ID. The default list on each account has the id combinedActiveMLS. Note that this method was previously called as "zipcodes" but was changed to keep API format more international. Calls to "zipcodes" will be forwarded to "postalcodes" and "zipcodes" is listed as deprecated in the method list.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - name: listID
+          in: path
+          required: false
+          description: The numaric id of a client postalcode list. If an ID is not given a list of IDs is returned.
+          type: number
+        - $ref: "#/parameters/filterField"
+        - $ref: "#/parameters/filterValue"
+        - $ref: "#/parameters/startDatetime"
+        - $ref: "#/parameters/dateType"
+        - $ref: "#/parameters/rf"
+      tags:
+        - Clients
+      responses:
+        200:
+          description: An array of agent data
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/postalcodeslistname:
+    get:
+      summary: postalcode information
+      description: Returns the IDs and names for each of a client's postalcode lists including MLS postalcode lists. To get the list of all postal code lists available do not send the primary request ID. The default list on each account has the ID combinedActiveMLS
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+
+      tags:
+        - Clients
+      responses:
+        200:
+          description: An array of postalcode data
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/savedlinks{savedLinksID}:
+    delete:
+      summary: remove a saved link
+      description: Remove a saved link from the account.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - name: savedLinksID
+          in: path
+          required: true
+          description: The numaric id of a client savedlink list. If an ID is not given a list of IDs is returned.
+          type: number
+
+      tags:
+        - Clients
+      responses:
+        204:
+          description: Empty return
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/savedlinks:
+    get:
+      summary: saved links information
+      description: Get saved links for a given client account.].
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameters/startDatetime"
+        - $ref: "#/parameters/dateType"
+        - $ref: "#/parameters/rf"
+      tags:
+        - Clients
+      responses:
+        200:
+          description: An array of saved links data
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/savedlinks{savedLinksID}:
+    post:
+      summary: Update an existing client's saved link
+      description: Update an existing client's saved link. This method is to be used at your own risk. We will NOT be held accountable for programmatic errors in your code or the improper use of search values or options within said values resulting in broken saved links.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - name: savedLinksID
+          in: path
+          required: true
+          description: The numaric id of a client savedlink list.
+          type: number
+
+      tags:
+        - Clients
+      responses:
+        200:
+          description: if no POST data is supplied, then a list of updatable fields with format information is returned
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        204:
+          description: Empty return
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/savedlinks{savedLinksID}:
+    put:
+      summary: Update an existing client's saved link
+      description: Update an existing client's saved link. This method is to be used at your own risk. We will NOT be held accountable for programmatic errors in your code or the improper use of search values or options within said values resulting in broken saved links.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - name: query string
+          in: path
+          required: true
+          description: search fields in a URL encoded, ampersand delineated query string format.
+          type: string
 
 
+      tags:
+        - Clients
+      responses:
+        200:
+          description: If a client saved link is successfully created, the new saved link's ID will be returned. If no PUT data is supplied, then a list of updatable fields with format information is returned.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/soldpending:
+    get:
+      summary: sold and pending properties information
+      description: Returns a basic set of information for all of the client's sold and pending properties. That is, those that have been removed from their MLS data.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameters/filterField"
+        - $ref: "#/parameters/filterValue"
+        - $ref: "#/parameters/startDatetime"
+        - $ref: "#/parameters/dateType"
+        - $ref: "#/parameters/rf"
+      tags:
+        - Clients
+      responses:
+        200:
+          description: An array of sold and pending properties data
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/supplemental{listingID}:
+    delete:
+      summary: remove a supplemental listing
+      description: Remove a supplemental listing from the account.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - name: listingID
+          in: path
+          required: true
+          description: The numaric id of a client supplemental listingID.
+          type: number
+
+      tags:
+        - Clients
+      responses:
+        204:
+          description: Empty return
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/supplemental:
+    get:
+      summary: saved links information
+      description: Get saved links for a given client account.].
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameters/startDatetime"
+        - $ref: "#/parameters/dateType"
+        - $ref: "#/parameters/rf"
+      tags:
+        - Clients
+      responses:
+        200:
+          description: An array of supplemental listing data
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        204:
+          description: Empty return
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/supplemental{listingID}:
+    post:
+      summary: Update an existing supplemental listing.
+      description: Update an existing supplemental listing. If updating images, existing images are deleted and the new images are inserted instead for the listing.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - name: listingID
+          in: path
+          required: true
+          description: The numaric id of a client supplemental listing.
+          type: number
+
+      tags:
+        - Clients
+      responses:
+        200:
+          description: if no POST data is supplied, then a list of updatable fields with format information is returned
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        204:
+          description: Empty return
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/supplemental:
+    put:
+      summary: Update an existing client's supplemental listing
+      description: Update an existing client's ssupplemental listing. This method is to be used at your own risk. We will NOT be held accountable for programmatic errors in your code or the improper use of search values or options within said values resulting in broken supplemental listing.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - name: query string
+          in: path
+          required: true
+          description: supplemental listingfields in a URL encoded, ampersand delineated query string format.
+          type: string
+
+
+      tags:
+        - Clients
+      responses:
+        200:
+          description: If a client saved link is successfully created, the new saved link's ID will be returned. If no PUT data is supplied, then a list of updatable fields with format information is returned.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/systemlinks:
+    get:
+      summary: system pages
+      description: Gathers all the pages system pages (search, featured, contact, etc) that can be directly linked to without additional property information being included in the URL.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameters/rf"
+      tags:
+        - Clients
+      responses:
+        200:
+          description: The name, unique ID, and URL for all system links on the account. Additionally there is a boolean named systemresults. If true this is a property results page that requires additional parameters. This means the url can be useful when dynamically building results page links but should not be linked to directly.When a client has more than one MLS on their account, listings for search pages that can vary by MLS ID will include a subpages array element.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/widgetsrc:
+    get:
+      summary: URLs for javascript widgets
+      description: Gather all the URLs for javascript widgets on the user account. These widgets can then be placed on the user's main site via the included URLs.
+
+
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - $ref: "#/parameters/rf"
+      tags:
+        - Clients
+      responses:
+        200:
+          description: The name, unique ID and URL for all javascript widgets that have been created on the user's account."
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/wrappercache:
+    delete:
+      summary: clear wrapper cache
+      description: clear wrapper cache.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+
+      tags:
+        - Clients
+      responses:
+        204:
+          description: Empty return
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Error'
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+  /clients/zipcodes{listID}:
+    get:
+      summary: zipcodes available in each of a client's zipcode lists
+      description: Returns the zipcodes available in each of a client's zipcode lists. Since a client can build any number of zipcode lists this method requires the ID of which list you want to view. To get a list of all zipcode lists available do not send the primary request ID. The default list on each account has the id combinedActiveMLS.
+      parameters:
+        - $ref: "#/parameters/accesskey"
+        - $ref: "#/parameters/version"
+        - $ref: "#/parameters/output"
+        - name: listID
+          in: path
+          required: false
+          description: The numaric id of a client zipcodes list. If an ID is not given a list of IDs is returned.
+          type: string
+      tags:
+        - Clients
+      responses:
+        200:
+          description: All zipcodes in a given list or, if a list ID is not provided, a list of list IDs.
+          schema:
+            type: string
+        400:
+          description: Required parameter missing or invalid.
+        401:
+          description: accesskey not valid or revoked.
+        403:
+          description: URL provided is not using SSL (HTTPS).
+        404:
+          description: Invalid API component specified.
+        405:
+          description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
+        406:
+          description: accesskey not provided
+        409:
+          description: Duplicate unique data detected.
+        412:
+          description: Account is over it's hourly access limit.
+        413:
+          description: Requested entity too large.
+        416:
+          description: Requested time range not satisfiable.
+        417:
+          description: There are more saved links in the account than allowed through the API.
+        500:
+          description: General system error. Please try again later or contact IDX support.
+        503:
+          description: Scheduled or emergency API maintenance will result in 503 errors.
+        521:
+          description: Temporary error. There is a possibility that not all API methods are affected.
+
+
+  #leads component
   /leads/lead/{leadID}:
     get:
       summary: Lead Data
@@ -99,11 +1431,13 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Place'
+              $ref: '#/definitions/Error'
         default:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
+
+  #mls component
   /mls/searchfields/{idxID}:
     get:
       summary: Seach Fields Data
@@ -127,11 +1461,13 @@ paths:
         200:
           description: Profile information for a user
           schema:
-            $ref: '#/definitions/Place'
+            $ref: '#/definitions/Error'
         default:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
+
+  #partners component
   /partners/clients:
     get:
       summary: Client List
@@ -149,7 +1485,7 @@ paths:
         200:
           description: History information for the given user
           schema:
-            $ref: '#/definitions/Place'
+            $ref: '#/definitions/Error'
         default:
           description: Unexpected error
           schema:
@@ -171,12 +1507,14 @@ parameters:
     description: Version of the API to call.
     required: false
     type: string
+    default: "1.2.3"
   output:
     name: output
     in: header
     description: Request JSON or XML return.
     required: false
     type: string
+    enum: ["json", "xml"]
   interval:
     name: interval
     in: query
@@ -224,44 +1562,11 @@ parameters:
     in: query
     description: The value by which to filter. Conditional on use of filterField.
     required: false
+    enum: ["test", "test3"]
     type: string
 
+
 definitions:
-
-  204:
-    description: Emptiness
-  400:
-    description: Required parameter missing or invalid.
-  401:
-    description: accesskey not valid or revoked.
-  403:
-    description: URL provided is not using SSL (HTTPS).
-  404:
-    description: Invalid API component specified.
-  405:
-    description: Method requested is invalid. This usually indicates a typo or that you may be requested a method that is part of a different API component.
-  406:
-    description: accesskey not provided
-  409:
-    description: Duplicate unique data detected.
-  412:
-    description: Account is over it's hourly access limit.
-  413:
-    description: Requested entity too large.
-  416:
-    description: Requested time range not satisfiable.
-  417:
-    description: There are more saved links in the account than allowed through the API.
-  500:
-    description: General system error. Please try again later or contact IDX support.
-  503:
-    description: Scheduled or emergency API maintenance will result in 503 errors.
-  521:
-    description: Temporary error. There is a possibility that not all API methods are affected.
-
-  Place:
-    placeholder: palceholder
-
   Error:
     type: object
     properties:
